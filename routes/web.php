@@ -114,11 +114,16 @@ Route::middleware('auth')->group(function () {
     });
 
     // -----------------------------------------------------------------------
-    // Admin Sistem: manajemen pengguna (admin saja)
+    // Kelola Pengguna: lihat daftar + aktifkan akun (Sekretaris & Admin,
+    // FR-02: Sekretaris mengaktifkan akun warga baru setelah No. KK dan NIK
+    // cocok dengan data KK). Tambah/hapus peran tetap Admin saja.
     // -----------------------------------------------------------------------
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('role:sekretaris,admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.index');
         Route::post('/pengguna/{pengguna}/aktifkan', [PenggunaController::class, 'aktifkan'])->name('pengguna.aktifkan');
+    });
+
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::post('/pengguna/{pengguna}/peran', [PenggunaController::class, 'tambahPeran'])->name('pengguna.peran.tambah');
         Route::delete('/pengguna/{pengguna}/peran', [PenggunaController::class, 'hapusPeran'])->name('pengguna.peran.hapus');
     });

@@ -25,10 +25,33 @@
                                 <td class="px-4 py-3">{{ $user->email }}</td>
                                 <td class="px-4 py-3">{{ $user->kartuKeluarga?->no_kk ?? '—' }}</td>
                                 <td class="px-4 py-3">
-                                    @if (is_iterable($user->roles ?? null))
-                                        {{ collect($user->roles)->map(fn ($r) => is_string($r) ? $r : ($r->peran ?? $r->nama ?? $r->name ?? ''))->filter()->implode(', ') ?: 'Warga' }}
-                                    @else
-                                        {{ $user->peran ?? 'Warga' }}
+                                    @php($peranAda = collect($user->roles ?? [])->map(fn ($r) => is_string($r) ? $r : ($r->peran ?? $r->nama ?? $r->name ?? ''))->filter()->values())
+                                    @forelse ($peranAda as $peran)
+                                        <span class="mr-1 inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-neutral-100 px-2 py-0.5 text-xs font-semibold text-neutral-700">{{ ucfirst($peran) }}
+                                            @if (auth()->user()?->hasRole('admin'))
+                                                <form method="POST" action="{{ route('admin.pengguna.peran.hapus', $user->id) }}" class="inline" onsubmit="return confirm('Hapus peran {{ ucfirst($peran) }} dari {{ $user->name }}?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="peran" value="{{ $peran }}">
+                                                    <button type="submit" class="font-bold text-danger-600 hover:underline" title="Hapus peran {{ ucfirst($peran) }}">×</button>
+                                                </form>
+                                            @endif
+                                        </span>
+                                    @empty
+                                        <span class="text-neutral-600">Warga</span>
+                                    @endforelse
+                                    @php($peranSisa = collect(['warga', 'ketua', 'sekretaris', 'bendahara', 'admin'])->diff($peranAda)->values())
+                                    @if (auth()->user()?->hasRole('admin') && $peranSisa->count())
+                                        <form method="POST" action="{{ route('admin.pengguna.peran.tambah', $user->id) }}" class="mt-2 flex items-center gap-1">
+                                            @csrf
+                                            <label class="sr-only" for="peran-{{ $user->id }}">Tambah peran</label>
+                                            <select id="peran-{{ $user->id }}" name="peran" class="rounded-lg border-neutral-300 text-xs focus:border-primary-600 focus:ring-primary-600">
+                                                @foreach ($peranSisa as $p)
+                                                    <option value="{{ $p }}">{{ ucfirst($p) }}</option>
+                                                @endforeach
+                                            </select>
+                                            <button type="submit" class="rounded-lg bg-primary-700 px-2 py-1 text-xs font-semibold text-white hover:bg-primary-600">Tambah</button>
+                                        </form>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">

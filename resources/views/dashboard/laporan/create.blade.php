@@ -12,8 +12,8 @@
                 <x-input-label for="kategori" :value="__('Kategori Laporan')" />
                 <select id="kategori" name="kategori" required class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">
                     <option value="">— Pilih kategori —</option>
-                    @foreach (['Kebersihan', 'Keamanan', 'Fasilitas', 'Lain-lain'] as $kat)
-                        <option value="{{ $kat }}" {{ old('kategori') === $kat ? 'selected' : '' }}>{{ $kat }}</option>
+                    @foreach (['kebersihan' => 'Kebersihan', 'keamanan' => 'Keamanan', 'fasilitas' => 'Fasilitas', 'lainnya' => 'Lain-lain'] as $nilai => $label)
+                        <option value="{{ $nilai }}" {{ old('kategori') === $nilai ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
                 @error('kategori')

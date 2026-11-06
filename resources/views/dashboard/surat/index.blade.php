@@ -24,7 +24,7 @@
                     <tbody>
                         @foreach ($surat as $s)
                             <tr class="border-t border-neutral-200">
-                                <td class="px-4 py-3 font-medium">{{ $s->jenis }}</td>
+                                <td class="px-4 py-3 font-medium">{{ labelJenisSurat($s->jenis) }}</td>
                                 <td class="px-4 py-3">{{ formatTanggal($s->created_at) }}</td>
                                 <td class="px-4 py-3">{{ $s->nomor_surat ?? '—' }}</td>
                                 <td class="px-4 py-3"><x-badge :status="$s->status" /></td>

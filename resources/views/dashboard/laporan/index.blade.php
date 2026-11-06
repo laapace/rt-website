@@ -14,7 +14,7 @@
                 <article class="rounded-xl border border-neutral-200 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
                     <div class="flex flex-wrap items-center justify-between gap-2">
                         <div class="flex flex-wrap items-center gap-2 text-xs">
-                            <span class="rounded-full bg-primary-100 px-2.5 py-0.5 font-semibold text-primary-700">{{ $l->kategori }}</span>
+                            <span class="rounded-full bg-primary-100 px-2.5 py-0.5 font-semibold text-primary-700">{{ labelKategoriLaporan($l->kategori) }}</span>
                             <span class="text-neutral-600">{{ formatTanggal($l->created_at) }}</span>
                         </div>
                         <x-badge :status="$l->status" />

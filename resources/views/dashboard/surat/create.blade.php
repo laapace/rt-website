@@ -12,8 +12,8 @@
                 <x-input-label for="jenis" :value="__('Jenis Surat')" />
                 <select id="jenis" name="jenis" required class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">
                     <option value="">— Pilih jenis surat —</option>
-                    @foreach (['Surat Keterangan Domisili', 'Surat Keterangan Tidak Mampu', 'Surat Keterangan Usaha', 'Surat Keterangan Kelahiran', 'Surat Keterangan Kematian'] as $jenis)
-                        <option value="{{ $jenis }}" {{ old('jenis') === $jenis ? 'selected' : '' }}>{{ $jenis }}</option>
+                    @foreach (['domisili' => 'Surat Keterangan Domisili', 'tidak_mampu' => 'Surat Keterangan Tidak Mampu', 'usaha' => 'Surat Keterangan Usaha', 'kelahiran' => 'Surat Keterangan Kelahiran', 'kematian' => 'Surat Keterangan Kematian', 'lainnya' => 'Surat Keterangan Lainnya'] as $nilai => $label)
+                        <option value="{{ $nilai }}" {{ old('jenis') === $nilai ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
                 @error('jenis')

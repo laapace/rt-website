@@ -68,3 +68,39 @@ if (! function_exists('bulanRomawi')) {
         return $romawi[$bulan] ?? '';
     }
 }
+
+if (! function_exists('labelJenisSurat')) {
+    /**
+     * Label jenis surat dari slug: 'domisili' => 'Surat Keterangan Domisili'.
+     */
+    function labelJenisSurat(?string $jenis): string
+    {
+        $peta = [
+            'domisili' => 'Surat Keterangan Domisili',
+            'tidak_mampu' => 'Surat Keterangan Tidak Mampu',
+            'usaha' => 'Surat Keterangan Usaha',
+            'kelahiran' => 'Surat Keterangan Kelahiran',
+            'kematian' => 'Surat Keterangan Kematian',
+            'lainnya' => 'Surat Keterangan',
+        ];
+
+        return $peta[$jenis ?? ''] ?? ($jenis ? ucfirst(str_replace('_', ' ', $jenis)) : '—');
+    }
+}
+
+if (! function_exists('labelKategoriLaporan')) {
+    /**
+     * Label kategori laporan dari slug: 'kebersihan' => 'Kebersihan'.
+     */
+    function labelKategoriLaporan(?string $kategori): string
+    {
+        $peta = [
+            'kebersihan' => 'Kebersihan',
+            'keamanan' => 'Keamanan',
+            'fasilitas' => 'Fasilitas',
+            'lainnya' => 'Lain-lain',
+        ];
+
+        return $peta[$kategori ?? ''] ?? ($kategori ? ucfirst($kategori) : '—');
+    }
+}

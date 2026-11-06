@@ -11,7 +11,7 @@
             @foreach ($antrean as $s)
                 <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
                     <div class="flex flex-wrap items-center justify-between gap-2">
-                        <p class="font-semibold">{{ $s->warga->nama ?? 'Warga' }} — {{ $s->jenis }}</p>
+                        <p class="font-semibold">{{ $s->warga->nama ?? 'Warga' }} — {{ labelJenisSurat($s->jenis) }}</p>
                         <x-badge :status="$s->status" />
                     </div>
                     <p class="mt-1 text-sm text-neutral-600">Diajukan {{ formatTanggal($s->created_at) }}</p>
@@ -56,7 +56,7 @@
                         @foreach ($riwayat as $s)
                             <tr class="border-t border-neutral-200">
                                 <td class="px-4 py-3 font-medium">{{ $s->warga->nama ?? '—' }}</td>
-                                <td class="px-4 py-3">{{ $s->jenis }}</td>
+                                <td class="px-4 py-3">{{ labelJenisSurat($s->jenis) }}</td>
                                 <td class="px-4 py-3">{{ $s->nomor_surat ?? '—' }}</td>
                                 <td class="px-4 py-3">
                                     <x-badge :status="$s->status" />
