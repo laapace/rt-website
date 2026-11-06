@@ -8,13 +8,14 @@ use App\Models\Pembayaran;
 use App\Models\TagihanIuran;
 use App\Services\IuranService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class IuranController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $user = auth()->user();
 
@@ -30,7 +31,21 @@ class IuranController extends Controller
             ->orderBy('tarif_id')
             ->get();
 
-        return view('dashboard.iuran.index', compact('tagihan', 'tagihanBulanBerjalan'));
+        // Tagihan yang dipilih dari riwayat (?bayar=<id>): tampilkan kartu
+        // bayarnya di atas riwayat. Tanpa ini, tagihan di luar bulan
+        // berjalan tidak bisa dibayar sama sekali (riwayat hanya "—").
+        // Scope untukUser + status menjaga agar hanya tagihan milik sendiri
+        // yang masih bisa dibayar yang bisa dipilih.
+        $tagihanDipilih = null;
+        if ($request->filled('bayar')) {
+            $tagihanDipilih = TagihanIuran::untukUser($user)
+                ->where('id', $request->string('bayar'))
+                ->whereIn('status', ['belum_bayar', 'terlambat'])
+                ->with(['tarif', 'pembayaran'])
+                ->first();
+        }
+
+        return view('dashboard.iuran.index', compact('tagihan', 'tagihanBulanBerjalan', 'tagihanDipilih'));
     }
 
     public function bayar(TagihanIuran $tagihan, UploadBuktiRequest $request, IuranService $iuranService): RedirectResponse

@@ -30,6 +30,14 @@ class LaporanController extends Controller
         $user = auth()->user();
         $data = $request->validated();
 
+        // Akun tanpa warga terhubung (mis. Admin Sistem) tidak punya
+        // warga_id — tolak dengan pesan jelas, jangan sampai 500 karena
+        // kolom warga_id di laporan_warga NOT NULL.
+        if (! $user->warga_id) {
+            return redirect()->back()
+                ->with('error', 'Akun Anda belum terhubung dengan data warga, jadi tidak bisa membuat laporan. Gunakan akun warga, atau hubungi Sekretaris RT.');
+        }
+
         if ($request->hasFile('foto')) {
             $data['foto_path'] = $request->file('foto')->store('laporan-foto', 'public');
         }

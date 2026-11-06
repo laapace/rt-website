@@ -25,37 +25,8 @@
                 </div>
             </div>
 
-            @if (in_array($tagihanBerjalan->status, ['belum_bayar', 'terlambat']))
-                <form method="POST" action="{{ route('dashboard.iuran.bayar', $tagihanBerjalan->id) }}" enctype="multipart/form-data" class="mt-5 border-t border-neutral-200 pt-5">
-                    @csrf
-                    <input type="hidden" name="nominal_dibayar" value="{{ $tagihanBerjalan->nominal }}">
-                    <div class="mt-3 grid gap-3 sm:grid-cols-2">
-                        <div>
-                            <label for="metode-{{ $tagihanBerjalan->id }}" class="text-sm font-semibold">Metode Pembayaran</label>
-                            <select id="metode-{{ $tagihanBerjalan->id }}" name="metode" required class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">
-                                <option value="transfer">Transfer</option>
-                                <option value="tunai">Tunai (ke Bendahara)</option>
-                                <option value="qris">QRIS</option>
-                            </select>
-                            @error('metode')<p class="mt-2 text-sm text-danger-600">{{ $message }}</p>@enderror
-                        </div>
-                        <div>
-                            <label for="tanggal_bayar-{{ $tagihanBerjalan->id }}" class="text-sm font-semibold">Tanggal Bayar</label>
-                            <input id="tanggal_bayar-{{ $tagihanBerjalan->id }}" name="tanggal_bayar" type="date" value="{{ date('Y-m-d') }}" required class="mt-1 block w-full rounded-lg border-neutral-300 px-3 py-2 text-sm">
-                            @error('tanggal_bayar')<p class="mt-2 text-sm text-danger-600">{{ $message }}</p>@enderror
-                        </div>
-                    </div>
-                    <label for="bukti-{{ $tagihanBerjalan->id }}" class="mt-4 block text-sm font-semibold">Upload Bukti Bayar</label>
-                    <p class="mt-1 text-xs text-neutral-600">Format JPG, PNG, atau PDF — maksimal 2 MB. Bayar via transfer / tunai ke Bendahara, lalu unggah buktinya di sini.</p>
-                    <div class="mt-3 flex flex-col gap-3 sm:flex-row">
-                        <input id="bukti-{{ $tagihanBerjalan->id }}" type="file" name="bukti" accept=".jpg,.jpeg,.png,.pdf" required class="flex-1 rounded-lg border border-neutral-300 px-3 py-2 text-sm">
-                        <button type="submit" class="rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600">Upload Bukti Bayar</button>
-                    </div>
-                    @error('bukti')
-                        <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
-                    @enderror
-                </form>
-            @elseif ($tagihanBerjalan->pembayaran_terakhir)
+            @include('dashboard.iuran._form-bayar', ['tagihanForm' => $tagihanBerjalan])
+            @if ($tagihanBerjalan->pembayaran_terakhir && ! in_array($tagihanBerjalan->status, ['belum_bayar', 'terlambat']))
                 <p class="mt-5 border-t border-neutral-200 pt-5 text-sm">
                     Bukti bayar:
                     <a href="{{ route('dashboard.iuran.bukti', $tagihanBerjalan->pembayaran_terakhir->id) }}" target="_blank" rel="noopener" class="font-semibold text-primary-700 hover:underline">Lihat Bukti</a>
@@ -65,6 +36,28 @@
         @endforeach
     @else
         <x-empty-state judul="Belum ada tagihan bulan ini" deskripsi="Tagihan dibuat Bendahara tiap awal bulan. Silakan periksa lagi nanti." />
+    @endif
+
+    {{-- Tagihan yang dipilih dari riwayat (?bayar=<id>) --}}
+    @if ($tagihanDipilih ?? null)
+        <div id="bayar" class="mt-6">
+            <x-card>
+                <x-slot name="judul">Bayar Tagihan — {{ $tagihanDipilih->tarif->nama ?? 'Iuran' }} {{ $tagihanDipilih->periode }}</x-slot>
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <p class="text-sm text-neutral-600">Periode</p>
+                        <p class="text-lg font-bold">{{ $tagihanDipilih->periode }}</p>
+                        <p class="mt-2 text-sm text-neutral-600">Nominal</p>
+                        <p class="text-2xl font-bold">{{ formatRupiah((int) ($tagihanDipilih->jumlah ?? $tagihanDipilih->nominal)) }}</p>
+                        <p class="mt-2 text-sm text-neutral-600">Jatuh tempo: {{ formatTanggal($tagihanDipilih->jatuh_tempo) }}</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <x-badge :status="$tagihanDipilih->status" />
+                    </div>
+                </div>
+                @include('dashboard.iuran._form-bayar', ['tagihanForm' => $tagihanDipilih])
+            </x-card>
+        </div>
     @endif
 
     {{-- Riwayat tagihan --}}
@@ -92,7 +85,9 @@
                                 <td class="px-4 py-3"><x-badge :status="$t->status" /></td>
                                 <td class="px-4 py-3">{{ $t->tanggal_bayar ? formatTanggal($t->tanggal_bayar) : '—' }}</td>
                                 <td class="px-4 py-3">
-                                    @if ($t->pembayaran_terakhir)
+                                    @if (in_array($t->status, ['belum_bayar', 'terlambat']))
+                                        <a href="{{ route('dashboard.iuran.index', ['bayar' => $t->id]) }}#bayar" class="font-semibold text-primary-700 hover:underline">Bayar</a>
+                                    @elseif ($t->pembayaran_terakhir)
                                         <a href="{{ route('dashboard.iuran.bukti', $t->pembayaran_terakhir->id) }}" target="_blank" rel="noopener" class="font-semibold text-primary-700 hover:underline">Lihat Bukti</a>
                                     @else
                                         <span class="text-neutral-600">—</span>

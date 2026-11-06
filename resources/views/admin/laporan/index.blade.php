@@ -26,6 +26,7 @@
 
                     <form method="POST" action="{{ route('admin.laporan.status', $l->id) }}" class="mt-4 border-t border-neutral-200 pt-4">
                         @csrf
+                        @method('PATCH')
                         <div class="flex flex-col gap-3 sm:flex-row">
                             <label class="sr-only" for="status-{{ $l->id }}">Ubah status</label>
                             <select id="status-{{ $l->id }}" name="status" required class="rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600 sm:w-48">

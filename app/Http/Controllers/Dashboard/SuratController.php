@@ -31,6 +31,14 @@ class SuratController extends Controller
     {
         $user = auth()->user();
 
+        // Akun tanpa warga terhubung (mis. Admin Sistem) tidak punya
+        // warga_id — tolak dengan pesan jelas, jangan sampai 500 karena
+        // kolom warga_id di surat_pengajuan NOT NULL.
+        if (! $user->warga_id) {
+            return redirect()->back()
+                ->with('error', 'Akun Anda belum terhubung dengan data warga, jadi tidak bisa mengajukan surat. Gunakan akun warga, atau hubungi Sekretaris RT.');
+        }
+
         $surat = SuratPengajuan::create([
             'warga_id' => $user->warga_id,
             'diajukan_oleh_user_id' => $user->id,

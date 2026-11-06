@@ -4,6 +4,11 @@
 @section('deskripsi', 'Ceritakan masalah di lingkungan RT — sertakan foto bila ada.')
 
 @section('content')
+    @if (! auth()->user()?->warga_id)
+        <div class="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-relaxed text-amber-800">
+            Akun Anda belum terhubung dengan data warga, jadi laporan tidak bisa dikirim. Gunakan akun warga, atau hubungi Sekretaris RT.
+        </div>
+    @endif
     <x-card>
         <form method="POST" action="{{ route('dashboard.laporan.store') }}" enctype="multipart/form-data">
             @csrf
