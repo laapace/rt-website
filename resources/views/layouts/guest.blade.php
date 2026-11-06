@@ -1,0 +1,33 @@
+{{-- Layout tamu (auth): dipakai halaman login/register/lupa password Breeze. --}}
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Website RT 02 RW 03') }}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-neutral-50 font-sans text-neutral-900 antialiased">
+    <div class="flex min-h-screen flex-col items-center pt-6 sm:justify-center sm:pt-0">
+        <a href="{{ route('public.beranda') }}" class="flex items-center gap-2">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-700 text-base font-extrabold text-white">RT</span>
+            <span class="text-xl font-bold text-primary-700">RT 02 RW 03</span>
+        </a>
+
+        <div class="mt-6 w-full overflow-hidden rounded-xl border border-neutral-200 bg-white px-6 py-6 shadow-[0_1px_3px_rgba(0,0,0,0.08)] sm:max-w-md">
+            {{ $slot }}
+        </div>
+
+        <a href="{{ route('public.beranda') }}" class="mt-4 text-sm text-neutral-600 hover:text-primary-700 hover:underline">← Kembali ke Beranda</a>
+    </div>
+</body>
+</html>

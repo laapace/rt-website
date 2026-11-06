@@ -1,0 +1,6 @@
+# Railway memakai Nixpacks: PHP (versi + extension dibaca dari composer.json),
+# Node, composer install, dan npm run build sudah otomatis terdeteksi.
+# Tambahan di sini hanya symlink storage, supaya upload bukti bayar
+# dan file publik lainnya bisa diakses lewat /storage.
+[phases.build]
+cmds = ["...", "php artisan storage:link"]

@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design RT — design.md §2: Plus Jakarta Sans, latar neutral-50, fokus keyboard terlihat */
+@layer base {
+    body {
+        @apply bg-neutral-50 font-sans text-neutral-900 antialiased;
+    }
+
+    :focus-visible {
+        outline: 2px solid #15803D;
+        outline-offset: 2px;
+    }
+}
