@@ -38,12 +38,8 @@
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>
-                <div>
-                    <x-input-label for="kepala_keluarga" :value="__('Nama Kepala Keluarga')" />
-                    <x-text-input id="kepala_keluarga" name="kepala_keluarga" type="text" :value="old('kepala_keluarga', $kk->kepala_keluarga ?? optional($kk->kepalaKeluarga)->nama)" required class="mt-1 block w-full" />
-                    @error('kepala_keluarga')
-                        <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
-                    @enderror
+                <div class="sm:col-span-2">
+                    <p class="text-sm text-neutral-600">Nama kepala keluarga: <span class="font-semibold text-neutral-900">{{ $kk->kepala_keluarga ?? optional($kk->kepalaKeluarga)->nama ?? '—' }}</span> — diubah lewat daftar anggota (tombol <span class="font-semibold">Edit</span> pada anggota yang bersangkutan).</p>
                 </div>
                 <div>
                     <x-input-label for="status_tinggal" :value="__('Status Tinggal')" />

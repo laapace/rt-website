@@ -53,6 +53,8 @@ class IuranAdminController extends Controller
 
     public function storeTarif(StoreTarifRequest $request): RedirectResponse
     {
+        $this->authorize('create', TarifIuran::class);
+
         $tarif = TarifIuran::create($request->validated());
 
         ActivityLog::create([
@@ -69,6 +71,8 @@ class IuranAdminController extends Controller
 
     public function generate(Request $request, IuranService $iuranService): RedirectResponse
     {
+        $this->authorize('create', TarifIuran::class);
+
         // Form UI mengirim bulan+tahun terpisah; API/test bisa mengirim 'periode' langsung.
         if ($request->filled('periode')) {
             $request->validate(['periode' => ['required', 'date_format:Y-m']]);

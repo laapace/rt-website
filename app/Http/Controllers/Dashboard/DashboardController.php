@@ -67,7 +67,8 @@ class DashboardController extends Controller
                 } : null,
                 'laporan_terbuka' => $laporanTerbuka,
                 'ronda_berikutnya' => $rondaBerikutnya?->tanggal,
-                'ronda_keterangan' => $rondaBerikutnya ? 'Blok '.$rondaBerikutnya->blok : null,
+                // blok sudah berisi 'Blok A' dst — jangan ditambah 'Blok ' lagi.
+                'ronda_keterangan' => $rondaBerikutnya?->blok,
             ];
             $pengumuman = Pengumuman::where('is_published', true)->orderByDesc('is_pinned')->latest()->take(3)->get();
 
@@ -105,7 +106,8 @@ class DashboardController extends Controller
             'surat_status' => 'Surat diajukan / diproses',
             'laporan_terbuka' => $laporanTerbuka,
             'ronda_berikutnya' => $rondaBerikutnya?->tanggal,
-            'ronda_keterangan' => $rondaBerikutnya ? 'Blok '.$rondaBerikutnya->blok : null,
+            // blok sudah berisi 'Blok A' dst — jangan ditambah 'Blok ' lagi.
+            'ronda_keterangan' => $rondaBerikutnya?->blok,
         ];
         $pengumuman = Pengumuman::where('is_published', true)->orderByDesc('is_pinned')->latest()->take(3)->get();
 

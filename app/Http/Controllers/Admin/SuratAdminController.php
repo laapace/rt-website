@@ -32,6 +32,11 @@ class SuratAdminController extends Controller
     {
         $this->authorize('update', $surat);
 
+        if (in_array($surat->status, ['disetujui', 'ditolak'], true)) {
+            return redirect()->route('admin.surat.index')
+                ->with('error', 'Surat ini sudah diproses sebelumnya.');
+        }
+
         // Log & notifikasi ditulis di dalam Service — jangan dobel log di sini.
         $nomor = $suratService->setujuiSurat($surat);
 
@@ -42,6 +47,11 @@ class SuratAdminController extends Controller
     public function tolak(Request $request, SuratPengajuan $surat, SuratService $suratService): RedirectResponse
     {
         $this->authorize('update', $surat);
+
+        if (in_array($surat->status, ['disetujui', 'ditolak'], true)) {
+            return redirect()->route('admin.surat.index')
+                ->with('error', 'Surat ini sudah diproses sebelumnya.');
+        }
 
         $request->validate([
             'alasan' => ['required', 'string'],

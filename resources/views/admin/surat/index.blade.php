@@ -16,8 +16,8 @@
                     </div>
                     <p class="mt-1 text-sm text-neutral-600">Diajukan {{ formatTanggal($s->created_at) }}</p>
                     <p class="mt-2 text-sm leading-relaxed"><span class="font-semibold">Keperluan: </span>{{ $s->keperluan }}</p>
-                    @if ($s->catatan ?? null)
-                        <p class="mt-1 text-sm text-neutral-600"><span class="font-semibold">Catatan: </span>{{ $s->catatan }}</p>
+                    @if (($s->data_surat['catatan'] ?? null))
+                        <p class="mt-1 text-sm text-neutral-600"><span class="font-semibold">Catatan: </span>{{ $s->data_surat['catatan'] }}</p>
                     @endif
                     <div class="mt-4 flex flex-wrap gap-2">
                         <form method="POST" action="{{ route('admin.surat.setujui', $s->id) }}">

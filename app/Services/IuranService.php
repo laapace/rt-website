@@ -107,6 +107,12 @@ class IuranService
             }
 
             if ($disetujui) {
+                // Pertahanan kedua: tagihan yang sudah lunas tidak boleh
+                // diverifikasi lagi (mencegah kas ganda bila ada celah lain).
+                if ($pembayaran->tagihan->status === 'lunas') {
+                    throw new \Exception('Tagihan ini sudah lunas.');
+                }
+
                 $pembayaran->update([
                     'status' => 'terverifikasi',
                     'diverifikasi_oleh' => Auth::id(),
@@ -179,6 +185,12 @@ class IuranService
     public function uploadBukti(TagihanIuran $tagihan, array $data, $file): Pembayaran
     {
         return DB::transaction(function () use ($tagihan, $data, $file) {
+            // Tagihan lunas / sedang diverifikasi tidak bisa dibayar ulang —
+            // tanpa ini, verifikasi kedua akan menggandakan kas.
+            if (! in_array($tagihan->status, ['belum_bayar', 'terlambat'], true)) {
+                throw new \Exception('Tagihan ini sudah dibayar atau sedang menunggu verifikasi.');
+            }
+
             $buktiPath = null;
 
             if ($file instanceof UploadedFile) {
@@ -187,10 +199,12 @@ class IuranService
                 $buktiPath = $file;
             }
 
+            // Nominal dipaksa sesuai tagihan: nilai dari form (hidden field)
+            // bisa diubah dari browser, kas harus tercatat sebesar tagihan.
             $pembayaran = Pembayaran::create([
                 'tagihan_id' => $tagihan->id,
                 'dibayar_oleh_user_id' => $data['dibayar_oleh_user_id'] ?? Auth::id(),
-                'nominal_dibayar' => $data['nominal_dibayar'],
+                'nominal_dibayar' => $tagihan->nominal,
                 'metode' => $data['metode'] ?? 'transfer',
                 'bukti_path' => $buktiPath,
                 'tanggal_bayar' => $data['tanggal_bayar'],

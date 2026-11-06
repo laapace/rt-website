@@ -27,16 +27,16 @@
 
             <div class="mt-4 grid gap-4 sm:grid-cols-3">
                 <div>
-                    <x-input-label for="tanggal" :value="__('Tanggal')" />
-                    <x-text-input id="tanggal" name="tanggal" type="date" :value="old('tanggal', $agenda->tanggal instanceof \DateTimeInterface ? $agenda->tanggal->format('Y-m-d') : $agenda->tanggal)" required class="mt-1 block w-full" />
-                    @error('tanggal')
+                    <x-input-label for="tanggal_mulai" :value="__('Mulai')" />
+                    <x-text-input id="tanggal_mulai" name="tanggal_mulai" type="datetime-local" :value="old('tanggal_mulai', $agenda->tanggal_mulai instanceof \DateTimeInterface ? $agenda->tanggal_mulai->format('Y-m-d\TH:i') : $agenda->tanggal_mulai)" required class="mt-1 block w-full" />
+                    @error('tanggal_mulai')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
-                    <x-input-label for="waktu" :value="__('Waktu')" />
-                    <x-text-input id="waktu" name="waktu" type="text" :value="old('waktu', $agenda->waktu)" class="mt-1 block w-full" />
-                    @error('waktu')
+                    <x-input-label for="tanggal_selesai" :value="__('Selesai (opsional)')" />
+                    <x-text-input id="tanggal_selesai" name="tanggal_selesai" type="datetime-local" :value="old('tanggal_selesai', $agenda->tanggal_selesai instanceof \DateTimeInterface ? $agenda->tanggal_selesai->format('Y-m-d\TH:i') : $agenda->tanggal_selesai)" class="mt-1 block w-full" />
+                    @error('tanggal_selesai')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>

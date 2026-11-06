@@ -29,7 +29,10 @@ class JadwalRonda extends Model
 
     public function petugas(): BelongsToMany
     {
+        // using() wajib: pivot RondaPetugas memakai HasUuids, tanpa ini
+        // sync()/attach() menyimpan id pivot NULL dan gagal di database.
         return $this->belongsToMany(Warga::class, 'ronda_petugas')
+            ->using(RondaPetugas::class)
             ->withTimestamps();
     }
 

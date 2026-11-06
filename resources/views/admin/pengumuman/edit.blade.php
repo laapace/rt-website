@@ -22,8 +22,8 @@
                     <x-input-label for="kategori" :value="__('Kategori')" />
                     <select id="kategori" name="kategori" required class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">
                         <option value="">— Pilih kategori —</option>
-                        @foreach (['Umum', 'Keuangan', 'Kegiatan', 'Keamanan'] as $kat)
-                            <option value="{{ $kat }}" {{ old('kategori', $pengumuman->kategori) === $kat ? 'selected' : '' }}>{{ $kat }}</option>
+                        @foreach (['umum' => 'Umum', 'keuangan' => 'Keuangan', 'kegiatan' => 'Kegiatan', 'keamanan' => 'Keamanan'] as $nilai => $label)
+                            <option value="{{ $nilai }}" {{ old('kategori', $pengumuman->kategori) === $nilai ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
                     @error('kategori')
@@ -31,8 +31,8 @@
                     @enderror
                 </div>
                 <div class="flex items-end pb-1">
-                    <label for="is_penting" class="inline-flex items-center gap-2 text-sm font-medium">
-                        <input id="is_penting" type="checkbox" name="is_penting" value="1" {{ old('is_penting', $pengumuman->is_penting ?? false) ? 'checked' : '' }} class="rounded border-neutral-300 text-primary-600 focus:ring-primary-600">
+                    <label for="is_pinned" class="inline-flex items-center gap-2 text-sm font-medium">
+                        <input id="is_pinned" type="checkbox" name="is_pinned" value="1" {{ old('is_pinned', $pengumuman->is_pinned ?? false) ? 'checked' : '' }} class="rounded border-neutral-300 text-primary-600 focus:ring-primary-600">
                         Sematkan sebagai pengumuman penting
                     </label>
                 </div>

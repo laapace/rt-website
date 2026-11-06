@@ -37,6 +37,8 @@ class KasController extends Controller
 
     public function store(StoreKasRequest $request): RedirectResponse
     {
+        $this->authorize('create', Kas::class);
+
         $kas = Kas::create(array_merge($request->validated(), [
             'dicatat_oleh' => auth()->id(),
         ]));
@@ -56,6 +58,14 @@ class KasController extends Controller
     public function destroy(Kas $kas): RedirectResponse
     {
         $this->authorize('delete', $kas);
+
+        // Kas yang berasal dari pembayaran terverifikasi tidak boleh dihapus:
+        // tagihannya sudah lunas, menghapus kas membuat saldo tidak cocok
+        // dengan tagihan. Koreksi dilakukan dengan menolak pembayaran terkait.
+        if ($kas->pembayaran_id) {
+            return redirect()->route('admin.kas.index')
+                ->with('error', 'Kas dari pembayaran terverifikasi tidak dapat dihapus.');
+        }
 
         $kas->delete(); // Soft-delete.
 

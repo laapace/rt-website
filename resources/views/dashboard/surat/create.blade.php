@@ -31,7 +31,7 @@
 
             <div class="mt-4">
                 <x-input-label for="catatan" :value="__('Catatan (opsional)')" />
-                <textarea id="catatan" name="catatan" rows="2" placeholder="Keterangan tambahan bila ada" class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">{{ old('catatan') }}</textarea>
+                <textarea id="catatan" name="data_surat[catatan]" rows="2" placeholder="Keterangan tambahan bila ada" class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">{{ old('data_surat.catatan') }}</textarea>
                 @error('catatan')
                     <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                 @enderror

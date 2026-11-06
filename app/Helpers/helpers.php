@@ -19,6 +19,10 @@ if (! function_exists('formatTanggal')) {
      */
     function formatTanggal($date): string
     {
+        if ($date === null || $date === '') {
+            return '—';
+        }
+
         $bulan = [
             1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr',
             5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agu',
@@ -28,6 +32,25 @@ if (! function_exists('formatTanggal')) {
         $tanggal = $date instanceof Carbon ? $date : Carbon::parse($date);
 
         return $tanggal->format('d').' '.$bulan[(int) $tanggal->format('m')].' '.$tanggal->format('Y');
+    }
+}
+
+if (! function_exists('formatAgenda')) {
+    /**
+     * Format tanggal + jam agenda: '08 Nov 2026 • 07:00–10:00 WIB'.
+     * Tanpa jam selesai: '08 Nov 2026 • 07:00 WIB'. Tanpa tanggal: '—'.
+     */
+    function formatAgenda($agenda): string
+    {
+        if (! $agenda || ! $agenda->tanggal_mulai) {
+            return '—';
+        }
+
+        $teks = formatTanggal($agenda->tanggal_mulai);
+        $mulai = $agenda->tanggal_mulai->format('H:i');
+        $selesai = $agenda->tanggal_selesai ? $agenda->tanggal_selesai->format('H:i') : null;
+
+        return $teks.' • '.$mulai.($selesai ? '–'.$selesai : '').' WIB';
     }
 }
 

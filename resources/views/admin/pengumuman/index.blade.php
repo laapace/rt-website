@@ -13,8 +13,8 @@
             @foreach ($pengumuman as $p)
                 <article class="rounded-xl border border-neutral-200 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
                     <div class="flex flex-wrap items-center gap-2 text-xs">
-                        <span class="rounded-full bg-primary-100 px-2.5 py-0.5 font-semibold text-primary-700">{{ $p->kategori ?? 'Umum' }}</span>
-                        @if ($p->is_penting ?? false)
+                        <span class="rounded-full bg-primary-100 px-2.5 py-0.5 font-semibold text-primary-700">{{ ucfirst($p->kategori ?? 'Umum') }}</span>
+                        @if ($p->is_pinned ?? false)
                             <x-badge status="penting" />
                         @endif
                         <span class="text-neutral-600">{{ formatTanggal($p->created_at) }}</span>

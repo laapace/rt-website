@@ -13,10 +13,7 @@
                         @endif
                     </div>
                     <div class="shrink-0 rounded-lg bg-primary-100 px-4 py-2 text-center">
-                        <p class="text-sm font-bold text-primary-700">{{ formatTanggal($a->tanggal) }}</p>
-                        @if ($a->waktu)
-                            <p class="text-xs text-primary-700">{{ $a->waktu }}</p>
-                        @endif
+                        <p class="text-sm font-bold text-primary-700">{{ formatAgenda($a) }}</p>
                     </div>
                 </div>
                 @if ($a->lokasi)

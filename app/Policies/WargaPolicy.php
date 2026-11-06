@@ -27,16 +27,16 @@ class WargaPolicy
 
     public function create(User $user): bool
     {
-        return $user->hasRole('sekretaris', 'admin');
+        return $user->hasRole('sekretaris', 'ketua', 'admin');
     }
 
     public function update(User $user, Warga $warga): bool
     {
-        return $user->hasRole('sekretaris', 'admin');
+        return $user->hasRole('sekretaris', 'ketua', 'admin');
     }
 
     public function delete(User $user, Warga $warga): bool
     {
-        return $user->hasRole('sekretaris', 'admin');
+        return $user->hasRole('sekretaris', 'ketua', 'admin');
     }
 }

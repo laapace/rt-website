@@ -26,16 +26,16 @@
 
             <div class="mt-4 grid gap-4 sm:grid-cols-3">
                 <div>
-                    <x-input-label for="tanggal" :value="__('Tanggal')" />
-                    <x-text-input id="tanggal" name="tanggal" type="date" :value="old('tanggal')" required class="mt-1 block w-full" />
-                    @error('tanggal')
+                    <x-input-label for="tanggal_mulai" :value="__('Mulai')" />
+                    <x-text-input id="tanggal_mulai" name="tanggal_mulai" type="datetime-local" :value="old('tanggal_mulai')" required class="mt-1 block w-full" />
+                    @error('tanggal_mulai')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
-                    <x-input-label for="waktu" :value="__('Waktu')" />
-                    <x-text-input id="waktu" name="waktu" type="text" :value="old('waktu')" placeholder="Contoh: 08.00–11.00" class="mt-1 block w-full" />
-                    @error('waktu')
+                    <x-input-label for="tanggal_selesai" :value="__('Selesai (opsional)')" />
+                    <x-text-input id="tanggal_selesai" name="tanggal_selesai" type="datetime-local" :value="old('tanggal_selesai')" class="mt-1 block w-full" />
+                    @error('tanggal_selesai')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>

@@ -43,9 +43,9 @@
             <x-slot name="judul">Notifikasi</x-slot>
             @forelse (($notifikasi ?? collect())->take(5) as $n)
                 <div class="border-b border-neutral-200 py-3 first:pt-0 last:border-0 last:pb-0">
-                    <p class="text-sm font-semibold leading-snug">{{ $n->judul ?? $n->pesan }}</p>
-                    @if (($n->judul ?? null) && ($n->pesan ?? null))
-                        <p class="mt-0.5 text-sm text-neutral-600">{{ $n->pesan }}</p>
+                    <p class="text-sm font-semibold leading-snug">{{ $n->judul }}</p>
+                    @if ($n->isi ?? null)
+                        <p class="mt-0.5 text-sm text-neutral-600">{{ $n->isi }}</p>
                     @endif
                     <p class="mt-1 text-xs text-neutral-600">{{ formatTanggal($n->created_at) }}</p>
                 </div>

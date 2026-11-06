@@ -18,7 +18,7 @@
                             @if ($a->deskripsi)
                                 <p class="mt-1 text-sm text-neutral-600">{{ $a->deskripsi }}</p>
                             @endif
-                            <p class="mt-2 text-sm text-neutral-600">{{ formatTanggal($a->tanggal) }}{{ $a->waktu ? ' • ' . $a->waktu : '' }}{{ $a->lokasi ? ' • ' . $a->lokasi : '' }}</p>
+                            <p class="mt-2 text-sm text-neutral-600">{{ formatAgenda($a) }}{{ $a->lokasi ? ' • ' . $a->lokasi : '' }}</p>
                         </div>
                         <div class="flex shrink-0 flex-wrap items-center gap-4 text-sm">
                             <a href="{{ route('admin.agenda.edit', $a->id) }}" class="font-semibold text-primary-700 hover:underline">Edit</a>

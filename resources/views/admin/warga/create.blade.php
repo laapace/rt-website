@@ -38,9 +38,9 @@
                     @enderror
                 </div>
                 <div>
-                    <x-input-label for="kepala_keluarga" :value="__('Nama Kepala Keluarga')" />
-                    <x-text-input id="kepala_keluarga" name="kepala_keluarga" type="text" :value="old('kepala_keluarga')" required class="mt-1 block w-full" />
-                    @error('kepala_keluarga')
+                    <x-input-label for="nama_kepala" :value="__('Nama Kepala Keluarga')" />
+                    <x-text-input id="nama_kepala" name="nama_kepala" type="text" :value="old('nama_kepala')" required class="mt-1 block w-full" />
+                    @error('nama_kepala')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>

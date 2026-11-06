@@ -37,6 +37,11 @@ class IuranController extends Controller
     {
         $this->authorize('view', $tagihan);
 
+        if (! in_array($tagihan->status, ['belum_bayar', 'terlambat'], true)) {
+            return redirect()->route('dashboard.iuran.index')
+                ->with('error', 'Tagihan ini sudah dibayar atau sedang menunggu verifikasi Bendahara.');
+        }
+
         $iuranService->uploadBukti($tagihan, $request->validated(), $request->file('bukti'));
 
         return redirect()->route('dashboard.iuran.index')

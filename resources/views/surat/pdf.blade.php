@@ -23,12 +23,14 @@
 </head>
 <body>
     @php
+        // Kunci di sini adalah nilai enum 'jenis' (slug), bukan nama panjang.
         $judulJenis = [
-            'Surat Keterangan Domisili' => 'SURAT KETERANGAN DOMISILI',
-            'Surat Keterangan Tidak Mampu' => 'SURAT KETERANGAN TIDAK MAMPU',
-            'Surat Keterangan Usaha' => 'SURAT KETERANGAN USAHA',
-            'Surat Keterangan Kelahiran' => 'SURAT KETERANGAN KELAHIRAN',
-            'Surat Keterangan Kematian' => 'SURAT KETERANGAN KEMATIAN',
+            'domisili' => 'SURAT KETERANGAN DOMISILI',
+            'tidak_mampu' => 'SURAT KETERANGAN TIDAK MAMPU',
+            'usaha' => 'SURAT KETERANGAN USAHA',
+            'kelahiran' => 'SURAT KETERANGAN KELAHIRAN',
+            'kematian' => 'SURAT KETERANGAN KEMATIAN',
+            'lainnya' => 'SURAT KETERANGAN',
         ];
         $judulSurat = $judulJenis[$surat->jenis] ?? strtoupper($surat->jenis);
         $warga = $surat->warga;
@@ -54,7 +56,7 @@
             <tr><td>NIK</td><td>:</td><td>{{ $warga->nik ?? '—' }}</td></tr>
             <tr><td>Tempat / Tanggal Lahir</td><td>:</td><td>{{ $warga->tempat_lahir ?? '—' }}{{ $warga->tanggal_lahir ? ', ' . formatTanggal($warga->tanggal_lahir) : '' }}</td></tr>
             <tr><td>Jenis Kelamin</td><td>:</td><td>{{ $warga->jenis_kelamin ?? '—' }}</td></tr>
-            <tr><td>Alamat</td><td>:</td><td>{{ $warga->alamat ?? $surat->kartuKeluarga->alamat ?? '—' }}</td></tr>
+            <tr><td>Alamat</td><td>:</td><td>{{ $warga->kartuKeluarga?->alamat ?? '—' }}</td></tr>
         </table>
 
         <p>Adalah benar warga {{ $pengaturan->nama_rt ?? 'RT 02 RW 03' }}{{ $pengaturan->kelurahan ? ', Kelurahan ' . $pengaturan->kelurahan : '' }}{{ $pengaturan->kecamatan ? ', Kecamatan ' . $pengaturan->kecamatan : '' }}{{ $pengaturan->kota ? ', Kota ' . $pengaturan->kota : '' }}.</p>

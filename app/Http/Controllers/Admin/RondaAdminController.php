@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRondaRequest;
 use App\Models\ActivityLog;
 use App\Models\JadwalRonda;
+use App\Models\Warga;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -17,7 +18,12 @@ class RondaAdminController extends Controller
             ->orderBy('tanggal')
             ->paginate(15);
 
-        return view('admin.ronda.index', compact('jadwal'));
+        // Daftar warga aktif untuk dipilih sebagai petugas (multi-select).
+        $daftarWarga = Warga::where('status_tinggal', 'aktif')
+            ->orderBy('nama_lengkap')
+            ->get();
+
+        return view('admin.ronda.index', compact('jadwal', 'daftarWarga'));
     }
 
     public function store(StoreRondaRequest $request): RedirectResponse

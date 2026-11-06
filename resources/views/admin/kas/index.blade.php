@@ -20,7 +20,8 @@
         <a href="{{ route('admin.kas.export') }}" class="rounded-lg border border-primary-700 px-5 py-2.5 text-center text-sm font-semibold text-primary-700 hover:bg-primary-100">Ekspor CSV</a>
     </div>
 
-    {{-- Form catat kas --}}
+    {{-- Form catat kas (hanya Bendahara/Admin — Ketua hanya melihat) --}}
+    @can('create', \App\Models\Kas::class)
     <x-card class="mt-6">
         <x-slot name="judul">Catat Kas Masuk / Keluar</x-slot>
         <form method="POST" action="{{ route('admin.kas.store') }}" enctype="multipart/form-data">
@@ -81,6 +82,7 @@
             <button type="submit" class="mt-5 rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600">Simpan Catatan Kas</button>
         </form>
     </x-card>
+    @endcan
 
     {{-- Riwayat kas --}}
     <h2 class="mb-4 mt-8 text-xl font-bold">Riwayat Kas</h2>
@@ -113,11 +115,15 @@
                                 <td class="px-4 py-3">{{ $k->keterangan }}</td>
                                 <td class="px-4 py-3 font-semibold">{{ formatRupiah((int) $k->nominal) }}</td>
                                 <td class="px-4 py-3">
+                                    @can('delete', $k)
                                     <form method="POST" action="{{ route('admin.kas.destroy', $k->id) }}" onsubmit="return confirm('Hapus catatan kas ini? Tindakan ini tidak bisa dibatalkan.')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="font-semibold text-danger-600 hover:underline">Hapus</button>
                                     </form>
+                                    @else
+                                        —
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

@@ -21,11 +21,11 @@
                     </div>
                     <h2 class="mt-2 text-lg font-semibold leading-snug">{{ $l->judul }}</h2>
                     <p class="mt-1 text-sm leading-relaxed text-neutral-600">{{ $l->deskripsi }}</p>
-                    @if ($l->foto ?? null)
-                        <img src="{{ asset('storage/' . $l->foto) }}" alt="Foto laporan: {{ $l->judul }}" class="mt-3 max-h-64 rounded-lg object-cover">
+                    @if ($l->foto_path ?? null)
+                        <img src="{{ asset('storage/' . $l->foto_path) }}" alt="Foto laporan: {{ $l->judul }}" class="mt-3 max-h-64 rounded-lg object-cover">
                     @endif
-                    @if ($l->komentar ?? null)
-                        <p class="mt-3 rounded-lg bg-neutral-50 px-3 py-2 text-sm"><span class="font-semibold">Komentar pengurus: </span>{{ $l->komentar }}</p>
+                    @if ($l->komentar_pengurus ?? null)
+                        <p class="mt-3 rounded-lg bg-neutral-50 px-3 py-2 text-sm"><span class="font-semibold">Komentar pengurus: </span>{{ $l->komentar_pengurus }}</p>
                     @endif
                 </article>
             @endforeach

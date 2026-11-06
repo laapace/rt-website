@@ -25,13 +25,14 @@
     @if (($pengurus ?? collect())->count())
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($pengurus as $orang)
+                @php($jabatan = ucfirst($orang->roles->first()?->peran ?? 'pengurus'))
                 <div class="rounded-xl border border-neutral-200 bg-white p-5 text-center shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
-                    <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-lg font-bold text-primary-700">{{ strtoupper(mb_substr($orang->nama, 0, 1)) }}</span>
-                    <p class="mt-3 font-semibold">{{ $orang->nama }}</p>
-                    <p class="text-sm text-neutral-600">{{ $orang->jabatan }}</p>
+                    <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-lg font-bold text-primary-700">{{ strtoupper(mb_substr($orang->name ?? '', 0, 1)) }}</span>
+                    <p class="mt-3 font-semibold">{{ $orang->name }}</p>
+                    <p class="text-sm text-neutral-600">{{ $jabatan }}</p>
                     {{-- Privasi (design §4.2): nomor WA hanya tampil publik untuk Ketua RT. --}}
-                    @if (str_contains(strtolower($orang->jabatan ?? ''), 'ketua') && ($orang->no_hp ?? $orang->nomor_wa ?? null))
-                        <p class="mt-2 text-sm text-neutral-600">WA: {{ $orang->no_hp ?? $orang->nomor_wa }}</p>
+                    @if (str_contains(strtolower($jabatan), 'ketua') && ($orang->no_hp ?? null))
+                        <p class="mt-2 text-sm text-neutral-600">WA: {{ $orang->no_hp }}</p>
                     @endif
                 </div>
             @endforeach

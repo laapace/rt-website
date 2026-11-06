@@ -20,8 +20,8 @@
                     <x-input-label for="blok" :value="__('Blok')" />
                     <select id="blok" name="blok" required class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">
                         <option value="">— Pilih blok —</option>
-                        @foreach (['A', 'B', 'C', 'D', 'E'] as $b)
-                            <option value="{{ $b }}" {{ old('blok') === $b ? 'selected' : '' }}>Blok {{ $b }}</option>
+                        @foreach (['Blok A', 'Blok B', 'Blok C', 'Blok D', 'Blok E'] as $b)
+                            <option value="{{ $b }}" {{ old('blok') === $b ? 'selected' : '' }}>{{ $b }}</option>
                         @endforeach
                     </select>
                     @error('blok')
@@ -29,15 +29,20 @@
                     @enderror
                 </div>
                 <div>
-                    <x-input-label for="waktu" :value="__('Waktu')" />
-                    <x-text-input id="waktu" name="waktu" type="text" :value="old('waktu', '22.00–04.00 WIB')" class="mt-1 block w-full" />
-                    @error('waktu')
+                    <x-input-label for="keterangan" :value="__('Keterangan (opsional)')" />
+                    <x-text-input id="keterangan" name="keterangan" type="text" :value="old('keterangan')" placeholder="Contoh: Ronda malam Blok A" class="mt-1 block w-full" />
+                    @error('keterangan')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
                 </div>
-                <div>
-                    <x-input-label for="petugas" :value="__('Petugas (pisahkan nama dengan koma)')" />
-                    <x-text-input id="petugas" name="petugas" type="text" :value="old('petugas')" required placeholder="Contoh: Budi, Agus, Slamet" class="mt-1 block w-full" />
+                <div class="sm:col-span-2">
+                    <x-input-label for="petugas" :value="__('Petugas (pilih warga, bisa lebih dari satu)')" />
+                    <select id="petugas" name="petugas[]" multiple size="6" class="mt-1 block w-full rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600">
+                        @foreach (($daftarWarga ?? collect()) as $w)
+                            <option value="{{ $w->id }}" {{ in_array($w->id, old('petugas', [])) ? 'selected' : '' }}>{{ $w->nama }} — {{ $w->kartuKeluarga->blok ?? '—' }}</option>
+                        @endforeach
+                    </select>
+                    <p class="mt-1 text-xs text-neutral-600">Tahan Ctrl (Windows) / Cmd (Mac) untuk memilih beberapa petugas. Jam ronda 22.00–04.00 WIB.</p>
                     @error('petugas')
                         <p class="mt-2 text-sm text-danger-600">{{ $message }}</p>
                     @enderror
@@ -57,6 +62,7 @@
                             <th class="px-4 py-3 font-semibold">Tanggal</th>
                             <th class="px-4 py-3 font-semibold">Blok</th>
                             <th class="px-4 py-3 font-semibold">Waktu</th>
+                            <th class="px-4 py-3 font-semibold">Keterangan</th>
                             <th class="px-4 py-3 font-semibold">Petugas</th>
                             <th class="px-4 py-3 font-semibold">Aksi</th>
                         </tr>
@@ -66,7 +72,8 @@
                             <tr class="border-t border-neutral-200">
                                 <td class="px-4 py-3 font-medium">{{ formatTanggal($j->tanggal) }}</td>
                                 <td class="px-4 py-3">{{ $j->blok }}</td>
-                                <td class="px-4 py-3">{{ $j->waktu ?? '22.00–04.00 WIB' }}</td>
+                                <td class="px-4 py-3">22.00–04.00 WIB</td>
+                                <td class="px-4 py-3">{{ $j->keterangan ?? '—' }}</td>
                                 <td class="px-4 py-3">
                                     @if (is_iterable($j->petugas ?? null))
                                         {{ collect($j->petugas)->map(fn ($p) => is_string($p) ? $p : ($p->nama ?? ''))->filter()->implode(', ') }}

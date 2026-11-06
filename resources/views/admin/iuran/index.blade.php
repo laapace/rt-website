@@ -13,7 +13,8 @@
     </div>
 
     <div class="mt-6 grid gap-6 lg:grid-cols-2">
-        {{-- Generate tagihan --}}
+        {{-- Generate tagihan (hanya Bendahara/Admin — Ketua hanya melihat) --}}
+        @can('create', \App\Models\TarifIuran::class)
         <x-card>
             <x-slot name="judul">Buat Tagihan Bulanan</x-slot>
             <form method="POST" action="{{ route('admin.iuran.generate') }}" onsubmit="return confirm('Buat tagihan untuk bulan yang dipilih? Tagihan yang sudah ada tidak akan dibuat ganda.')">
@@ -41,6 +42,7 @@
                 <button type="submit" class="mt-4 w-full rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600">Generate Tagihan</button>
             </form>
         </x-card>
+        @endcan
 
         {{-- Tarif iuran aktif: generate membuat 1 tagihan per KK per tarif --}}
         <x-card>
@@ -57,6 +59,7 @@
             </ul>
             <p class="mt-2 text-xs text-neutral-600">Generate tagihan membuat 1 tagihan per KK untuk setiap tarif aktif di atas (10 KK × {{ ($tarifs ?? collect())->count() }} tarif = {{ 10 * ($tarifs ?? collect())->count() }} tagihan per bulan).</p>
 
+            @can('create', \App\Models\TarifIuran::class)
             <h3 class="mt-5 text-sm font-bold">Tambah Tarif</h3>
             <form method="POST" action="{{ route('admin.iuran.tarif.store') }}" class="mt-2">
                 @csrf
@@ -86,6 +89,7 @@
                 </div>
                 <button type="submit" class="mt-4 w-full rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600">Tambah Tarif</button>
             </form>
+            @endcan
         </x-card>
     </div>
 
@@ -104,6 +108,7 @@
                             @endif
                         </div>
                         <div class="flex flex-wrap gap-2">
+                            @can('update', $bayar)
                             <form method="POST" action="{{ route('admin.iuran.verifikasi', $bayar->id) }}">
                                 @csrf
                                 <button type="submit" class="rounded-lg bg-primary-700 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600">Verifikasi</button>
@@ -113,6 +118,7 @@
                                 <input type="text" name="alasan" placeholder="Alasan penolakan (wajib)" required class="rounded-lg border-neutral-300 text-sm focus:border-primary-600 focus:ring-primary-600">
                                 <button type="submit" class="rounded-lg border border-danger-600 px-4 py-2 text-sm font-semibold text-danger-600 hover:bg-red-50">Tolak</button>
                             </form>
+                            @endcan
                         </div>
                     </div>
                 </div>

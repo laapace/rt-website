@@ -143,7 +143,9 @@ class WargaController extends Controller
     {
         $this->authorize('delete', $warga);
 
-        $warga->delete(); // Soft-delete.
+        // Hapus beserta anggotanya (sesuai teks konfirmasi di view).
+        $warga->warga()->delete(); // Soft-delete anggota.
+        $warga->delete(); // Soft-delete KK.
 
         ActivityLog::create([
             'user_id' => auth()->id(),
@@ -212,6 +214,13 @@ class WargaController extends Controller
         $this->authorize('delete', $anggota);
 
         $kartuKeluargaId = $anggota->kartu_keluarga_id;
+        $kartuKeluarga = KartuKeluarga::find($kartuKeluargaId);
+
+        // Kalau yang dihapus adalah kepala keluarga, kosongkan penunjuknya.
+        if ($kartuKeluarga && $kartuKeluarga->kepala_keluarga_id === $anggota->id) {
+            $kartuKeluarga->update(['kepala_keluarga_id' => null]);
+        }
+
         $anggota->delete(); // Soft-delete.
 
         ActivityLog::create([

@@ -26,8 +26,8 @@ class SuratService
         return DB::transaction(function () use ($surat) {
             $surat = SuratPengajuan::where('id', $surat->id)->lockForUpdate()->firstOrFail();
 
-            if ($surat->status === 'disetujui') {
-                throw new \Exception('Surat ini sudah disetujui sebelumnya.');
+            if (in_array($surat->status, ['disetujui', 'ditolak'], true)) {
+                throw new \Exception('Surat ini sudah diproses sebelumnya.');
             }
 
             $tahun = (int) now()->format('Y');

@@ -7,8 +7,8 @@
         <label class="sr-only" for="kategori">Kategori</label>
         <select id="kategori" name="kategori" class="rounded-lg border-neutral-300 focus:border-primary-600 focus:ring-primary-600 sm:w-48">
             <option value="">Semua kategori</option>
-            @foreach (['Umum', 'Keuangan', 'Kegiatan', 'Keamanan'] as $kat)
-                <option value="{{ $kat }}" {{ ($kategori ?? request('kategori')) === $kat ? 'selected' : '' }}>{{ $kat }}</option>
+            @foreach (['umum' => 'Umum', 'keuangan' => 'Keuangan', 'kegiatan' => 'Kegiatan', 'keamanan' => 'Keamanan'] as $nilai => $label)
+                <option value="{{ $nilai }}" {{ ($kategori ?? request('kategori')) === $nilai ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
         </select>
         <label class="sr-only" for="q">Cari pengumuman</label>
@@ -20,8 +20,8 @@
         @forelse ($pengumuman as $p)
             <article class="rounded-xl border border-neutral-200 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
                 <div class="flex flex-wrap items-center gap-2 text-xs">
-                    <span class="rounded-full bg-primary-100 px-2.5 py-0.5 font-semibold text-primary-700">{{ $p->kategori ?? 'Umum' }}</span>
-                    @if ($p->is_penting ?? false)
+                    <span class="rounded-full bg-primary-100 px-2.5 py-0.5 font-semibold text-primary-700">{{ ucfirst($p->kategori ?? 'Umum') }}</span>
+                    @if ($p->is_pinned ?? false)
                         <x-badge status="penting" />
                     @endif
                     <span class="text-neutral-600">{{ formatTanggal($p->created_at) }}</span>
