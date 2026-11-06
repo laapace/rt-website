@@ -13,9 +13,9 @@ class PenggunaController extends Controller
 {
     public function index(): View
     {
-        $pengguna = User::with('roles')->orderBy('name')->paginate(15);
+        $users = User::with(['roles', 'kartuKeluarga'])->orderBy('name')->paginate(15);
 
-        return view('admin.pengguna.index', compact('pengguna'));
+        return view('admin.pengguna.index', compact('users'));
     }
 
     public function aktifkan(User $pengguna): RedirectResponse

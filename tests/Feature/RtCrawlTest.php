@@ -88,6 +88,16 @@ class RtCrawlTest extends TestCase
         // Belum bisa login sebelum diaktifkan
         $this->post('/login', ['email' => 'wargabaru@rt02.example', 'password' => 'password123'])
             ->assertSessionHasErrors('email');
+        // Akun baru harus tampil di Kelola Pengguna (regresi: daftar sempat
+        // kosong karena controller mengirim $pengguna, view memakai $users).
+        $this->actingAs($this->user('admin@rt02.example'))
+            ->get('/admin/pengguna')->assertOk()
+            ->assertSee('Warga Baru Tes')
+            ->assertSee('wargabaru@rt02.example')
+            ->assertSee($kk->no_kk)
+            ->assertSee('Menunggu Aktivasi')
+            ->assertSee('Aktifkan')
+            ->assertDontSee('Belum ada pengguna');
         // Sekretaris/admin aktifkan, lalu bisa login
         $this->actingAs($this->user('admin@rt02.example'))
             ->post(route('admin.pengguna.aktifkan', $baru))->assertRedirect();

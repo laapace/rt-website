@@ -23,10 +23,10 @@
                             <tr class="border-t border-neutral-200">
                                 <td class="px-4 py-3 font-medium">{{ $user->name }}</td>
                                 <td class="px-4 py-3">{{ $user->email }}</td>
-                                <td class="px-4 py-3">{{ $user->no_kk ?? $user->kartu_keluarga_id ?? '—' }}</td>
+                                <td class="px-4 py-3">{{ $user->kartuKeluarga?->no_kk ?? '—' }}</td>
                                 <td class="px-4 py-3">
                                     @if (is_iterable($user->roles ?? null))
-                                        {{ collect($user->roles)->map(fn ($r) => is_string($r) ? $r : ($r->nama ?? $r->name ?? ''))->filter()->implode(', ') ?: 'Warga' }}
+                                        {{ collect($user->roles)->map(fn ($r) => is_string($r) ? $r : ($r->peran ?? $r->nama ?? $r->name ?? ''))->filter()->implode(', ') ?: 'Warga' }}
                                     @else
                                         {{ $user->peran ?? 'Warga' }}
                                     @endif
